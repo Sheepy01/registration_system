@@ -1,0 +1,88 @@
+<h2>Workshop Registration</h2>
+
+<p>Email: {{ email }}</p>
+
+{% if hospital %}
+
+<p><b>Hospital:</b> {{ hospital.hospital_name }}</p>
+<p><b>Hospital ID:</b> {{ hospital.hospital_id }}</p>
+<p><b>District:</b> {{ hospital.district }}</p>
+
+{% else %}
+
+<h3>Select Hospital</h3>
+
+<label>District</label>
+<select id="district">
+<option value="">Select District</option>
+
+{% for d in districts %}
+<option value="{{ d }}">{{ d }}</option>
+{% endfor %}
+
+</select>
+
+<br><br>
+
+<label>Hospital</label>
+<select id="hospital">
+<option value="">Select Hospital</option>
+</select>
+
+<br><br>
+
+<label>Hospital ID</label>
+<input type="text" id="hospital_id" readonly>
+
+{% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">Register</button>
+
+</form>
+
+<script>
+
+document.getElementById("district").addEventListener("change", function(){
+
+    let district = this.value
+
+    fetch(`/api/hospitals/?district=${district}`)
+    .then(response => response.json())
+    .then(data => {
+
+        let hospitalDropdown = document.getElementById("hospital")
+
+        hospitalDropdown.innerHTML = '<option value="">Select Hospital</option>'
+
+        data.forEach(function(h){
+
+            let option = document.createElement("option")
+
+            option.value = h.id
+            option.text = h.name
+            option.dataset.hospitalid = h.hospital_id
+
+            hospitalDropdown.appendChild(option)
+
+        })
+
+    })
+
+})
+
+
+document.getElementById("hospital").addEventListener("change", function(){
+
+    let hospital_id = this.options[this.selectedIndex].dataset.hospitalid
+
+    document.getElementById("hospital_id").value = hospital_id
+
+})
+
+</script>
