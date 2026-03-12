@@ -11,4 +11,6 @@ urlpatterns = [
     path("api/live/", views.live_registrations),
     path("monitor/", views.monitor, name="monitor"),
     path("dashboard/", views.dashboard, name="dashboard"),
+    path("login/", views.login_page, name="login"),
+    path("email-login/", views.email_login, name="email_login"),
 ]

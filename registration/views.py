@@ -4,6 +4,7 @@ from .models import Hospital, Registration
 from .forms import RegistrationForm
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Count
+from django.utils import timezone
 import csv
 
 def landing(request):
@@ -16,10 +17,17 @@ def dashboard(request):
 
     return render(request, "dashboard.html", {"total": total})
 
+def login_page(request):
+
+    return render(request, "login.html")
+
 @login_required
 def register(request):
 
-    email = request.user.email
+    email = request.session.get("user_email")
+
+    if not email and request.user.is_authenticated:
+        email = request.user.email
 
     # check if already registered
     if Registration.objects.filter(email=email).exists():
@@ -27,7 +35,7 @@ def register(request):
     
     districts = Hospital.objects.values_list("district", flat=True).distinct()
 
-    hospital = Hospital.objects.filter(email=email).first()
+    hospital = find_hospital_by_email(email)
 
     if request.method == "POST":
 
@@ -80,6 +88,31 @@ def get_hospitals_by_district(request):
         })
 
     return JsonResponse(data, safe=False)
+
+def find_hospital_by_email(user_email):
+
+    user_email = user_email.lower().strip()
+
+    for h in Hospital.objects.all():
+
+        emails = [e.strip().lower() for e in h.email.split(",")]
+
+        if user_email in emails:
+            return h
+
+    return None
+
+def email_login(request):
+
+    if request.method == "POST":
+
+        email = request.POST.get("email")
+
+        request.session["user_email"] = email
+
+        return redirect("/register/")
+
+    return redirect("/login/")
 
 def stats(request):
 
@@ -143,14 +176,18 @@ def live_registrations(request):
 
     data = []
 
+    # Convert times to Indian Standard Time (UTC+5:30)
+    ist = timezone.get_fixed_timezone(330)
+
     for r in registrations:
 
         data.append({
             "name": r.name,
             "email": r.email,
             "hospital": r.hospital.hospital_name if r.hospital else "",
+            "hospital_id": r.hospital.hospital_id if r.hospital else "",
             "district": r.hospital.district if r.hospital else "",
-            "time": r.created_at.strftime("%H:%M:%S")
+            "time": timezone.localtime(r.created_at, ist).strftime("%H:%M:%S")
         })
 
     return JsonResponse(data, safe=False)

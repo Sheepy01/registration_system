@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Workshop Login</h2>
+
+<form method="POST" action="/email-login/">
+
+{% csrf_token %}
+
+<label>Enter your Email</label>
+
+<input type="email" name="email" required>
+
+<button type="submit">Continue</button>
+
+</form>
+
+<hr>
+
+<p style="text-align:center">OR</p>
+
+<a href="/accounts/google/login/">
+
+<button>Sign in with Google</button>
+
+</a>
+
+{% endblock %}

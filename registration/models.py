@@ -5,7 +5,7 @@ class Hospital(models.Model):
     hospital_id = models.CharField(max_length=50)
     hospital_name = models.CharField(max_length=255)
     district = models.CharField(max_length=100)
-    email = models.EmailField()
+    email = models.TextField()
 
     def __str__(self):
         return f"{self.hospital_name} ({self.district})"
