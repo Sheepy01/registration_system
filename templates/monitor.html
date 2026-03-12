@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Live Registration Monitor</h2>
+
+<h3>Total Registrations: <span id="count">{{ total }}</span></h3>
+
+<a href="/export/">
+<button>Download All Registrations</button>
+</a>
+
+<hr>
+
+<table border="1" width="100%" id="regTable">
+
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Hospital</th>
+<th>District</th>
+<th>Time</th>
+</tr>
+
+</table>
+
+
+<script>
+
+function loadRegistrations(){
+
+fetch("/api/live/")
+
+.then(response => response.json())
+
+.then(data => {
+
+let table = document.getElementById("regTable")
+
+table.innerHTML = `
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Hospital</th>
+<th>District</th>
+<th>Time</th>
+</tr>
+`
+
+data.forEach(function(r){
+
+table.innerHTML += `
+<tr>
+<td>${r.name}</td>
+<td>${r.email}</td>
+<td>${r.hospital}</td>
+<td>${r.district}</td>
+<td>${r.time}</td>
+</tr>
+`
+
+})
+
+document.getElementById("count").innerText = data.length
+
+})
+
+}
+
+loadRegistrations()
+
+setInterval(loadRegistrations, 5000)
+
+</script>
+
+{% endblock %}

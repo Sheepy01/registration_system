@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Workshop Registration</h2>
+
+<p style="text-align:center">
+
+You are about to sign in using your Google account.
+
+</p>
+
+<form method="post">
+
+{% csrf_token %}
+
+<button type="submit">
+
+Continue with Google
+
+</button>
+
+</form>
+
+{% endblock %}

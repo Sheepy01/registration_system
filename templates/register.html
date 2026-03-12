@@ -1,6 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <h2>Workshop Registration</h2>
 
 <p>Email: {{ email }}</p>
+
+<form method="POST">
+
+{% csrf_token %}
 
 {% if hospital %}
 
@@ -13,7 +21,9 @@
 <h3>Select Hospital</h3>
 
 <label>District</label>
-<select id="district">
+
+<select id="district" required>
+
 <option value="">Select District</option>
 
 {% for d in districts %}
@@ -25,20 +35,20 @@
 <br><br>
 
 <label>Hospital</label>
-<select id="hospital">
+
+<select id="hospital" name="hospital" required>
+
 <option value="">Select Hospital</option>
+
 </select>
 
 <br><br>
 
 <label>Hospital ID</label>
+
 <input type="text" id="hospital_id" readonly>
 
 {% endif %}
-
-<form method="POST">
-
-{% csrf_token %}
 
 {{ form.as_p }}
 
@@ -46,17 +56,21 @@
 
 </form>
 
+
 <script>
 
-document.getElementById("district").addEventListener("change", function(){
+const districtDropdown = document.getElementById("district")
+const hospitalDropdown = document.getElementById("hospital")
+
+if (districtDropdown){
+
+districtDropdown.addEventListener("change", function(){
 
     let district = this.value
 
     fetch(`/api/hospitals/?district=${district}`)
     .then(response => response.json())
     .then(data => {
-
-        let hospitalDropdown = document.getElementById("hospital")
 
         hospitalDropdown.innerHTML = '<option value="">Select Hospital</option>'
 
@@ -76,8 +90,12 @@ document.getElementById("district").addEventListener("change", function(){
 
 })
 
+}
 
-document.getElementById("hospital").addEventListener("change", function(){
+
+if (hospitalDropdown){
+
+hospitalDropdown.addEventListener("change", function(){
 
     let hospital_id = this.options[this.selectedIndex].dataset.hospitalid
 
@@ -85,4 +103,8 @@ document.getElementById("hospital").addEventListener("change", function(){
 
 })
 
+}
+
 </script>
+
+{% endblock %}

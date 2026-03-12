@@ -1,3 +1,28 @@
-<h2>Registration Successful</h2>
+{% extends "base.html" %}
 
-<p>Thank you for registering for the workshop.</p>
+{% block content %}
+
+<h2 class="success">Registration Successful</h2>
+
+<p><b>Name:</b> {{ name }}</p>
+
+<p><b>Hospital:</b> {{ hospital }}</p>
+
+<p><b>Registered At:</b></p>
+
+<p style="font-size:18px">
+
+{{ time }}
+
+</p>
+
+<hr>
+
+<p style="text-align:center">
+
+Thank you for registering for the  
+<b>Anti-Fraud Workshop for Private Empanelled Hospitals</b>
+
+</p>
+
+{% endblock %}

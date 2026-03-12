@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Workshop Control Panel</h2>
+
+<p style="text-align:center">
+Total Registrations
+</p>
+
+<h1 style="text-align:center">
+{{ total }}
+</h1>
+
+<hr>
+
+<div style="display:grid; gap:15px;">
+
+<a href="/monitor/">
+<button>📊 Live Registration Monitor</button>
+</a>
+
+<a href="/export/">
+<button>⬇ Download All Registrations</button>
+</a>
+
+<a href="/stats/">
+<button>📈 Statistics</button>
+</a>
+
+<a href="/admin/">
+<button>⚙ Admin Panel</button>
+</a>
+
+<a href="/">
+<button>👥 Registration Page</button>
+</a>
+
+</div>
+
+{% endblock %}

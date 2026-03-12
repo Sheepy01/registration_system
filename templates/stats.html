@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Registration Statistics</h2>
+
+<p>Total Registrations: {{ total }}</p>
+
+<h3>District Wise</h3>
+
+<ul>
+
+{% for d in district_stats %}
+
+<li>{{ d.hospital__district }} : {{ d.count }}</li>
+
+{% endfor %}
+
+</ul>
+
+<h3>Top Hospitals</h3>
+
+<ul>
+
+{% for h in hospital_stats %}
+
+<li>{{ h.hospital__hospital_name }} : {{ h.count }}</li>
+
+{% endfor %}
+
+</ul>
+
+{% endblock %}

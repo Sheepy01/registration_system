@@ -1,10 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
 from .models import Hospital, Registration
 from .forms import RegistrationForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Count
+import csv
 
+def landing(request):
+    total = Registration.objects.count()
+    return render(request,"landing.html",{"total":total})
+
+def dashboard(request):
+
+    total = Registration.objects.count()
+
+    return render(request, "dashboard.html", {"total": total})
 
 @login_required
 def register(request):
@@ -36,7 +46,11 @@ def register(request):
 
             reg.save()
 
-            return render(request, "success.html")
+            return render(request, "success.html", {
+                "name": reg.name,
+                "hospital": reg.hospital.hospital_name,
+                "time": reg.created_at
+            })
 
     else:
         form = RegistrationForm()
@@ -66,3 +80,83 @@ def get_hospitals_by_district(request):
         })
 
     return JsonResponse(data, safe=False)
+
+def stats(request):
+
+    total = Registration.objects.count()
+
+    district_stats = Registration.objects.values(
+        "hospital__district"
+    ).annotate(count=Count("id"))
+
+    hospital_stats = Registration.objects.values(
+        "hospital__hospital_name"
+    ).annotate(count=Count("id")).order_by("-count")[:10]
+
+    context = {
+
+        "total":total,
+        "district_stats":district_stats,
+        "hospital_stats":hospital_stats
+    }
+
+    return render(request,"stats.html",context)
+
+
+def export_all_registrations(request):
+
+    response = HttpResponse(content_type='text/csv')
+
+    response['Content-Disposition'] = 'attachment; filename="registrations.csv"'
+
+    writer = csv.writer(response)
+
+    writer.writerow([
+        "Email",
+        "Name",
+        "Designation",
+        "Mobile",
+        "Hospital",
+        "District",
+        "Registration Time"
+    ])
+
+    registrations = Registration.objects.select_related("hospital").all()
+
+    for r in registrations:
+
+        writer.writerow([
+            r.email,
+            r.name,
+            r.designation,
+            r.mobile,
+            r.hospital.hospital_name if r.hospital else "",
+            r.hospital.district if r.hospital else "",
+            r.created_at
+        ])
+
+    return response
+
+def live_registrations(request):
+
+    registrations = Registration.objects.select_related("hospital").order_by("-created_at")[:50]
+
+    data = []
+
+    for r in registrations:
+
+        data.append({
+            "name": r.name,
+            "email": r.email,
+            "hospital": r.hospital.hospital_name if r.hospital else "",
+            "district": r.hospital.district if r.hospital else "",
+            "time": r.created_at.strftime("%H:%M:%S")
+        })
+
+    return JsonResponse(data, safe=False)
+
+def monitor(request):
+
+    total = Registration.objects.count()
+
+    return render(request, "monitor.html", {"total": total})
