@@ -7,19 +7,21 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
 
-        df = pd.read_excel("hospitals.xlsx")
+        df = pd.read_excel("hospitals.xlsx", dtype=str)
+
+        df = df.fillna("")
 
         for _, row in df.iterrows():
 
             Hospital.objects.update_or_create(
 
-                email=row["email"],
+                hospital_name=row["hospital_name"],
 
                 defaults={
-                    "hospital_name": row["hospital_name"],
                     "hospital_id": row["hospital_id"],
-                    "district": row["district"]
+                    "district": row["district"],
+                    "email": row["email"]
                 }
             )
 
-        print("Hospitals imported")
+        print("Hospitals imported successfully")

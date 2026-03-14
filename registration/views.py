@@ -33,7 +33,7 @@ def register(request):
     if Registration.objects.filter(email=email).exists():
         return render(request, "already_registered.html")
     
-    districts = Hospital.objects.values_list("district", flat=True).distinct()
+    districts = Hospital.objects.values_list("district", flat=True).distinct().order_by("district")
 
     hospital = find_hospital_by_email(email)
 
@@ -76,7 +76,7 @@ def get_hospitals_by_district(request):
 
     district = request.GET.get("district")
 
-    hospitals = Hospital.objects.filter(district=district)
+    hospitals = Hospital.objects.filter(district=district).order_by("hospital_name")
 
     data = []
 
