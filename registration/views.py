@@ -54,10 +54,14 @@ def register(request):
 
             reg.save()
 
+            # Convert stored UTC timestamp to Indian Standard Time (UTC+5:30)
+            ist = timezone.get_fixed_timezone(330)
+            time_ist = timezone.localtime(reg.created_at, ist).strftime("%Y-%m-%d %H:%M:%S")
+
             return render(request, "success.html", {
                 "name": reg.name,
                 "hospital": reg.hospital.hospital_name,
-                "time": reg.created_at
+                "time": time_ist
             })
 
     else:
