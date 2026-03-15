@@ -4,7 +4,9 @@
 
 <h2>Workshop Registration</h2>
 
-<p>Email: {{ email }}</p>
+<div class="card">
+<b>Email:</b> {{ email }}
+</div>
 
 <form method="POST">
 
@@ -12,15 +14,19 @@
 
 {% if hospital %}
 
-<p><b>Hospital:</b> {{ hospital.hospital_name }}</p>
-<p><b>Hospital ID:</b> {{ hospital.hospital_id }}</p>
-<p><b>District:</b> {{ hospital.district }}</p>
+<div class="card">
+<b>Hospital:</b> {{ hospital.hospital_name }}<br>
+<b>Hospital ID:</b> {{ hospital.hospital_id }}<br>
+<b>District:</b> {{ hospital.district }}
+</div>
+
+<input type="hidden" name="hospital" value="{{ hospital.id }}">
 
 {% else %}
 
 <h3>Select Hospital</h3>
 
-<label>District</label>
+<label>District <span style="color:red">*</span></label>
 
 <select id="district" required>
 
@@ -32,9 +38,7 @@
 
 </select>
 
-<br><br>
-
-<label>Hospital</label>
+<label>Hospital <span style="color:red">*</span></label>
 
 <select id="hospital" name="hospital" required>
 
@@ -42,20 +46,24 @@
 
 </select>
 
-<br><br>
-
 <label>Hospital ID</label>
 
 <input type="text" id="hospital_id" readonly>
 
 {% endif %}
 
-{{ form.as_p }}
+<label>Name <span style="color:red">*</span></label>
+{{ form.name }}
+
+<label>Designation <span style="color:red">*</span></label>
+{{ form.designation }}
+
+<label>Mobile <span style="color:red">*</span></label>
+{{ form.mobile }}
 
 <button type="submit">Register</button>
 
 </form>
-
 
 <script>
 
@@ -91,7 +99,6 @@ districtDropdown.addEventListener("change", function(){
 })
 
 }
-
 
 if (hospitalDropdown){
 

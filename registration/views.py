@@ -32,8 +32,8 @@ def register(request):
         return redirect("/login/")
 
     # check if already registered
-    if Registration.objects.filter(email=email).exists():
-        return render(request, "already_registered.html")
+    # if Registration.objects.filter(email=email).exists():
+    #     return render(request, "already_registered.html")
     
     districts = Hospital.objects.values_list("district", flat=True).distinct().order_by("district")
 
@@ -156,6 +156,7 @@ def export_all_registrations(request):
         "Designation",
         "Mobile",
         "Hospital",
+        "Hospital ID",
         "District",
         "Registration Time"
     ])
@@ -170,6 +171,7 @@ def export_all_registrations(request):
             r.designation,
             r.mobile,
             r.hospital.hospital_name if r.hospital else "",
+            r.hospital.hospital_id if r.hospital else "",
             r.hospital.district if r.hospital else "",
             r.created_at
         ])

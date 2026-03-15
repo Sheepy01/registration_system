@@ -2,30 +2,23 @@
 
 {% block content %}
 
-<h2>Ayushman Manthan Bihar</h2>
+<h1>Ayushman Manthan Bihar</h1>
 
-<p style="text-align:center">
-
-Anti-Fraud Workshop
-
+<p class="subtitle">
+Anti-Fraud Workshop for Private Empanelled Hospitals
 </p>
 
-<p style="text-align:center">
+<div class="card center">
+<b>Registered Participants</b><br>
+<span style="font-size:26px;color:#2c7be5">{{ total }}</span>
+</div>
 
-Registered Participants: {{ total }}
-
-</p>
-
-<p style="text-align:center">
-
-Click below to register
-
+<p class="center">
+Click below to begin your registration
 </p>
 
 <a href="/login/">
-
-<button>Register</button>
-
+<button>Start Registration</button>
 </a>
 
 {% endblock %}

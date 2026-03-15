@@ -2,27 +2,23 @@
 
 {% block content %}
 
-<h2 class="success">Registration Successful</h2>
+<h2 class="success">Registration Successful ✓</h2>
 
-<p><b>Name:</b> {{ name }}</p>
+<div class="card">
+<b>Name:</b> {{ name }} <br>
+<b>Hospital:</b> {{ hospital }}
+</div>
 
-<p><b>Hospital:</b> {{ hospital }}</p>
-
-<p><b>Registered At:</b></p>
-
-<p style="font-size:18px">
-
-{{ time }}
-
-</p>
+<div class="card center">
+<b>Registration Time</b><br>
+<span style="font-size:18px">{{ time }}</span>
+</div>
 
 <hr>
 
-<p style="text-align:center">
-
-Thank you for registering for the  
-<b>Ayushman Manthan Bihar</b>
-
+<p class="center">
+Thank you for registering for the<br>
+<b>Ayushman Manthan Bihar – Anti-Fraud Workshop</b>
 </p>
 
 {% endblock %}

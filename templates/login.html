@@ -2,20 +2,22 @@
 
 {% block content %}
 
-<h2>Workshop Login</h2>
+<h2>Participant Login</h2>
+
+<p class="subtitle">
+Enter your email to continue registration
+</p>
 
 <form method="POST" action="/email-login/">
 
 {% csrf_token %}
 
-<label>Enter your Email</label>
+<label>Email Address <span style="color:red">*</span></label>
 
-<input type="email" name="email" required>
+<input type="email" name="email" placeholder="example@email.com" required>
 
 <button type="submit">Continue</button>
 
 </form>
-
-<hr>
 
 {% endblock %}

@@ -13,15 +13,9 @@ class Hospital(models.Model):
 
 class Registration(models.Model):
 
-    email = models.EmailField(unique=True)
-
+    email = models.EmailField()
     name = models.CharField(max_length=200)
     designation = models.CharField(max_length=200)
-    mobile = models.CharField(max_length=20, blank=True)
-
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True, blank=True)
-
+    mobile = models.CharField(max_length=15)
+    hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.email
