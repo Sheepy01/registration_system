@@ -21,13 +21,15 @@ def login_page(request):
 
     return render(request, "login.html")
 
-@login_required
 def register(request):
 
     email = request.session.get("user_email")
 
     if not email and request.user.is_authenticated:
         email = request.user.email
+
+    if not email:
+        return redirect("/login/")
 
     # check if already registered
     if Registration.objects.filter(email=email).exists():
